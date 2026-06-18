@@ -1,3 +1,14 @@
+# Aula 0
+- [x] Criar estrutura do projeto
+- [x] setup do banco
+- [] seeding do banco (adicionar dados)
+- [] Introdução ao Next.js
+- [] tailwind e shadcn
+- [] git hooks
+
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
