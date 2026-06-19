@@ -1,14 +1,23 @@
-"use client"
 import { SearchIcon } from "lucide-react"
 import { Button } from "./components/ui/button"
-import Header from "./components/ui/header"
+import Header from "./components/header"
 import { Input } from "./components/ui/input"
 import Image from "next/image"
 import { Card, CardContent } from "./components/ui/card"
 import { Badge } from "./components/ui/badge"
 import { Avatar, AvatarImage } from "./components/ui/avatar"
+import { db } from './_lib/prisma'
+import BarberShopItem from "./components/barbershop-item"
 
-const Home = () => {
+const Home = async () => {
+  const barbershops = await db.barbershop.findMany({})
+  const popularBarbershops = await db.barbershop.findMany({
+    orderBy: {
+      name: 'desc'
+    }
+  })
+  //console.log({barbershops})
+
   return (
     <div>
       <Header/>
@@ -29,7 +38,11 @@ const Home = () => {
           <Image alt='banner' src="/banner-01.png" fill className="object-cover rounded-xl"/>
         </div>
 
-        <Card className="mt-6">
+        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+          Agendamentos
+        </h2>
+
+        <Card >
           <CardContent className="flex justify-between">
             
             {/*Esquerda */}
@@ -53,7 +66,34 @@ const Home = () => {
             </div>
           </CardContent>
         </Card>
+
+        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+          Recomendados
+        </h2>
+        <div className="flex gap-4 overflow-auto mb-10 [&::-webkit-scrollbar]:hidden">
+          {
+            barbershops.map((barbershop) => <BarberShopItem key={barbershop.id} barbershop={barbershop}/>)
+          }
+        </div>
+
+        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+          Populares
+        </h2>
+        <div className="flex gap-4 overflow-auto mb-10 [&::-webkit-scrollbar]:hidden">
+          {
+            popularBarbershops.map((barbershop) => <BarberShopItem key={barbershop.id} barbershop={barbershop}/>)
+          }
+        </div>
+        
       </div>
+
+      <footer>
+          <Card className="rounded-none ring-0">
+            <CardContent className="px-5 py-6">
+              <p className="text-sm text-gray-400">© 2026 Copyright <span className="font-bold">FSW Barber</span></p>
+            </CardContent>
+        </Card>
+      </footer>
     </div>
     
   )
