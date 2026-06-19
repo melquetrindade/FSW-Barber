@@ -13,7 +13,8 @@ const BarberShopItem = ({ barbershop }: { barbershop: Barbershop }) => {
                 <div className="relative h-[159px] w-full">
                     <Image 
                         alt={barbershop.name} 
-                        fill 
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" // Eu que adicionei este sizes (Fora a parte) 
                         className="object-cover rounded-2xl" 
                         src={barbershop.imageURL} />
 

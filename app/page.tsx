@@ -4,10 +4,11 @@ import Header from "./components/header"
 import { Input } from "./components/ui/input"
 import Image from "next/image"
 import { Card, CardContent } from "./components/ui/card"
-import { Badge } from "./components/ui/badge"
-import { Avatar, AvatarImage } from "./components/ui/avatar"
 import { db } from './_lib/prisma'
 import BarberShopItem from "./components/barbershop-item"
+import { quickSearchOptions } from "./_constants/search"
+import BookingItem from "./components/booking-item"
+
 
 const Home = async () => {
   const barbershops = await db.barbershop.findMany({})
@@ -16,7 +17,6 @@ const Home = async () => {
       name: 'desc'
     }
   })
-  //console.log({barbershops})
 
   return (
     <div>
@@ -27,6 +27,7 @@ const Home = async () => {
           <p>Quinta-feira, 18 de Junho</p>
         </div>
 
+        {/*Busca */}
         <div className="flex items-center gap-2 mt-4">
           <Input placeholder='Faça sua busca'/>
           <Button>
@@ -34,39 +35,25 @@ const Home = async () => {
           </Button>
         </div>
 
+        {/*Busca rápida */}
+        <div className="flex gap-3 mt-6 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+          {quickSearchOptions.map((item) => (
+            <Button className="gap-2" variant='secondary' key={item.title}>
+              <Image alt={item.title} src={item.imageURL} width={16} height={16}/>
+              {item.title}
+            </Button>
+          ))}
+        </div>
+
+        {/*Imagem */}
         <div className="relative w-full h-[150px] mt-6">
           <Image alt='banner' src="/banner-01.png" fill className="object-cover rounded-xl"/>
         </div>
 
-        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
-          Agendamentos
-        </h2>
+        {/*Agendamentos */}
+        <BookingItem/>
 
-        <Card >
-          <CardContent className="flex justify-between">
-            
-            {/*Esquerda */}
-            <div className="flex flex-col gap-2 py-5 pl-5">
-              <Badge className="w-fit rounded-xl">Confirmado</Badge>
-              <h3 className="font-bold">Corte de Cabelo</h3>
-
-              <div className="flex items-center gap-2">
-                <Avatar className="h-6 w-6">
-                  <AvatarImage src="https://utfs.io/f/c97a2dc9-cf62-468b-a851-bfd2bdde775f-16p.png"/>
-                </Avatar>
-                <p className="text-sm">Barbearia FSW</p>
-              </div>
-            </div>
-
-            {/*Direita */}
-            <div className="flex flex-col items-center justify-center px-5 border-l-2 border-solid">
-              <p className="text-sm">Junho</p>
-              <p className="text-2xl">18</p>
-              <p className="text-sm">15:00</p>
-            </div>
-          </CardContent>
-        </Card>
-
+        {/*Recomendados */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
           Recomendados
         </h2>
@@ -76,6 +63,7 @@ const Home = async () => {
           }
         </div>
 
+        {/*Populares */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
           Populares
         </h2>
@@ -87,6 +75,7 @@ const Home = async () => {
         
       </div>
 
+      {/*Footer */}
       <footer>
           <Card className="rounded-none ring-0">
             <CardContent className="px-5 py-6">
