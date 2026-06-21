@@ -74,15 +74,6 @@ const Home = async () => {
         </div>
         
       </div>
-
-      {/*Footer */}
-      <footer>
-          <Card className="rounded-none ring-0">
-            <CardContent className="px-5 py-6">
-              <p className="text-sm text-gray-400">© 2026 Copyright <span className="font-bold">FSW Barber</span></p>
-            </CardContent>
-        </Card>
-      </footer>
     </div>
     
   )

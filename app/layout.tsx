@@ -1,6 +1,9 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import { cn } from "@/app/_lib/utils"
+import { Toaster } from "./components/ui/sonner"
+import Footer from "./components/footer"
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,6 +19,8 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className="antialiased">
         {children}
+        <Toaster/>
+        <Footer/>
       </body>
     </html>
   )
