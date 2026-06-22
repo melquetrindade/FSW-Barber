@@ -3,6 +3,7 @@ import "./globals.css"
 import { cn } from "@/app/_lib/utils"
 import { Toaster } from "./components/ui/sonner"
 import Footer from "./components/footer"
+import AuthProvider from "./_providers/auth"
 
 
 export const metadata: Metadata = {
@@ -18,9 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="antialiased">
-        {children}
-        <Toaster/>
-        <Footer/>
+        <AuthProvider>
+          {children}
+          <Toaster/>
+          <Footer/>
+        </AuthProvider>
       </body>
     </html>
   )
