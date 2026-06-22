@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  output   = "./generated"
 }
 
 datasource db {
@@ -19,8 +19,6 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
-
-// Começa aqui (Tabelas criadas do next auth)
 
 model Account {
   userId            String
@@ -60,8 +58,6 @@ model VerificationToken {
 
   @@id([identifier, token])
 }
-
-// termina aqui
 
 model Barbershop {
   id          String              @id @default(uuid())
