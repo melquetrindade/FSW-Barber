@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import { db } from "@/app/_lib/prisma"
 import { Adapter } from "next-auth/adapters"
 
+// ARQUIVO IMPORTANTE (FAZ A INTEGRAÇÃO COM O NEXTAUTH, PRISMA E AUTENTICAÇÃO COM O GOOLE)
 const handler = NextAuth({
   adapter: PrismaAdapter(db) as Adapter,
   providers: [

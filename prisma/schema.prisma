@@ -1,12 +1,13 @@
 generator client {
   provider = "prisma-client"
-  output   = "./generated"
+  output   = "./generated" // Este é o caminho no qual o arquivo generated será criado (Colocar sempre na pasta Prisma)
 }
 
 datasource db {
   provider = "postgresql"
 }
 
+// Algumas partes foram adicionadas pelo NextAuth
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -20,6 +21,7 @@ model User {
   updatedAt     DateTime  @updatedAt
 }
 
+// Modelo adicionado pelo NextAuth
 model Account {
   userId            String
   type              String
@@ -41,6 +43,7 @@ model Account {
   @@id([provider, providerAccountId])
 }
 
+// Modelo adicionado pelo NextAuth
 model Session {
   sessionToken String   @unique
   userId       String
@@ -51,6 +54,7 @@ model Session {
   updatedAt DateTime @updatedAt
 }
 
+// Modelo adicionado pelo NextAuth
 model VerificationToken {
   identifier String
   token      String

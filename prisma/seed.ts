@@ -5,10 +5,8 @@ import { PrismaPg } from "@prisma/adapter-pg";
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
-// const { PrismaClient } = require("@prisma/client");
-
-// const prisma = new PrismaClient();
-
+// Função para prencher o banco de dados no Neon
+// Depois implementar um sistema para cadastrar manualmente as barbearias
 async function seedDatabase() {
   try {
     const images = [

@@ -1,13 +1,11 @@
-import { SearchIcon } from "lucide-react"
 import { Button } from "./components/ui/button"
 import Header from "./components/header"
-import { Input } from "./components/ui/input"
 import Image from "next/image"
-import { Card, CardContent } from "./components/ui/card"
 import { db } from './_lib/prisma'
 import BarberShopItem from "./components/barbershop-item"
 import { quickSearchOptions } from "./_constants/search"
 import BookingItem from "./components/booking-item"
+import Search from "./components/search"
 
 
 const Home = async () => {
@@ -28,13 +26,10 @@ const Home = async () => {
         </div>
 
         {/*Busca */}
-        <div className="flex items-center gap-2 mt-4">
-          <Input placeholder='Faça sua busca'/>
-          <Button>
-            <SearchIcon/>
-          </Button>
+        <div className="mt-4">
+          <Search/>
         </div>
-
+        
         {/*Busca rápida */}
         <div className="flex gap-3 mt-6 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
           {quickSearchOptions.map((item) => (
