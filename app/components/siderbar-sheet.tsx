@@ -3,7 +3,7 @@
 import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet"
 import { quickSearchOptions } from "../_constants/search"
 import Link from "next/link"
-import { CalendarIcon, HomeIcon, LogInIcon, LogOutIcon, MenuIcon } from "lucide-react"
+import { CalendarIcon, HomeIcon, LogInIcon, LogOutIcon} from "lucide-react"
 import { Button } from "./ui/button"
 import Image from "next/image"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
@@ -96,10 +96,14 @@ const SidebarSheet = () => {
 
             <div className="px-5 flex flex-col gap-2 border-b border-solid pb-5">
                 {quickSearchOptions.map((options) => (
-                    <Button key={options.title} className="gap-2 justify-start" variant='ghost'>
-                        <Image alt={options.title} src={options.imageURL} height={18} width={18}/>
-                        {options.title}
-                    </Button>
+                    <SheetClose asChild key={options.title}>
+                        <Button asChild className="gap-2 justify-start" variant='ghost'>
+                            <Link href={`/barbershops?service=${options.title}`}>
+                                <Image alt={options.title} src={options.imageURL} height={18} width={18}/>
+                            {options.title}
+                            </Link>
+                        </Button>
+                    </SheetClose>
                 ))}
             </div>
 

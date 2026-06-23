@@ -20,8 +20,8 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className="antialiased">
         <AuthProvider>
-          <div className="flex h-full flex-col">
-            <div className="flex-1">
+          <div className="flex h-full flex-col"> {/*Classes necessárias para deixar o footer sempre em baixo e o conteúdo principal ocupando todo o espaço  central da tela*/}
+            <div className="flex-1"> {/*Esta também é importante para fazer o efeito de cima (OBS: preicsa de outro estilo que fica no arquivo globals.css) */}
               {children}
             </div>
             <Footer/>

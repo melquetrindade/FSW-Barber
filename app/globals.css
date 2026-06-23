@@ -108,3 +108,5 @@
     @apply font-sans h-full;
   }
 }
+
+/* h-full no body e html são necessários para criar o efeito mencionado no layout */

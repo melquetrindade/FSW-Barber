@@ -5,20 +5,36 @@ import Search from "../components/search";
 
 interface BarbershopsPageProps {
     searchParams: {
-        search?: string
+        title?: string,
+        service?: string
     }
 }
 
 const BarbershopsPage = async ({searchParams}: BarbershopsPageProps) => {
     const barbershops = await db.barbershop.findMany({
         where: {
-            name: {
-                contains: searchParams?.search,
-                mode: "insensitive"
-            }
+            OR: [
+                searchParams?.title ? {
+                    name: {
+                        contains: searchParams?.title,
+                        mode: "insensitive"
+                    }
+                } : {},
+            searchParams?.service ?
+                {
+                    services: {
+                        some: {
+                            name: {
+                                contains: searchParams?.service,
+                                mode: "insensitive"
+                            }
+                        }
+                    }
+                } : {}
+            ]
         }
     })
-
+    
     return (
         <div>
             <Header/>
@@ -28,7 +44,7 @@ const BarbershopsPage = async ({searchParams}: BarbershopsPageProps) => {
             
             <div className="px-5 mb-3">
                 <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
-                    {`Resultados para "${searchParams.search}"`}
+                    {`Resultados para "${searchParams.service || searchParams.title}"`}
                 </h2>
                 <div className="grid grid-cols-2 gap-4">
                     {barbershops.map((barbershop) => (
@@ -41,3 +57,27 @@ const BarbershopsPage = async ({searchParams}: BarbershopsPageProps) => {
 }
  
 export default BarbershopsPage;
+
+
+// const barbershops = await db.barbershop.findMany({
+    //     where: {
+    //         OR: [
+    //             {
+    //                 name: {
+    //                     contains: searchParams?.search,
+    //                     mode: "insensitive"
+    //                 }
+    //             },
+    //             {
+    //                 services: {
+    //                     some: {
+    //                         name: {
+    //                             contains: searchParams?.search,
+    //                             mode: "insensitive"
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         ]
+    //     }
+    // })

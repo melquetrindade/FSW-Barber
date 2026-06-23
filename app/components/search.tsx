@@ -10,7 +10,7 @@ import { Input } from "./ui/input"
 import { Field, FieldContent, FieldError } from "./ui/field"
 
 const formSchema = z.object({
-  search: z.string().trim().min(1, {
+  title: z.string().trim().min(1, {
     message: "Digite algo para buscar",
   }),
 })
@@ -23,12 +23,12 @@ export default function Search() {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      search: "",
+      title: "",
     },
   })
 
   function onSubmit(data: FormData) {
-    router.push(`/barbershops?search=${encodeURIComponent(data.search)}`)
+    router.push(`/barbershops?title=${encodeURIComponent(data.title)}`)
   }
 
   return (
@@ -40,7 +40,7 @@ export default function Search() {
         <FieldContent>
           <Controller
             control={form.control}
-            name="search"
+            name="title"
             render={({ field }) => (
               <Input
                 placeholder="Faça sua busca..."
@@ -54,7 +54,7 @@ export default function Search() {
             )}
           />
 
-          <FieldError errors={[form.formState.errors.search]} />
+          <FieldError errors={[form.formState.errors.title]} />
         </FieldContent>
       </Field>
 
