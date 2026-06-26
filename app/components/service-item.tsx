@@ -1,17 +1,18 @@
 "use client"
 
-import {Barbershop, BarbershopService} from '../../prisma/generated/client'
+import {Barbershop, BarbershopService, Booking} from '../../prisma/generated/client'
 import Image from 'next/image'
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 import { Calendar } from './ui/calendar'
 import { ptBR } from 'date-fns/locale';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { format, set } from 'date-fns';
 import { createBooking } from '../_actions/create-booking';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
+import { getBookings } from '../_actions/get-booking';
 
 interface ServiceItemProps {
     service: BarbershopService
@@ -42,7 +43,19 @@ const TIME_LIST = [
 const ServiceItem = ({service, barbershop} :  ServiceItemProps) => {
     const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
     const [selectedTime, setSelectedTime] = useState<string | undefined>(undefined)
-    const {data} = useSession()
+    const {data} = useSession() // Esta função trás dados do usuário logado
+    const [dayBookings, setDayBookings] = useState<Booking[]>([])
+
+    useEffect(() => {
+        const fetch = async () => {
+            if(!selectedDay) return
+            const bookings = await getBookings({date: selectedDay, serviceId: service.id})
+            setDayBookings(bookings)
+        }
+        fetch()
+    }, [selectedDay, service.id])
+
+    console.log("agendamentos:", dayBookings);
 
     const handleDateSelect = (date: Date | undefined) => {
         setSelectedDay(date)
@@ -55,6 +68,7 @@ const ServiceItem = ({service, barbershop} :  ServiceItemProps) => {
     const handleCreateBooking = async () => {
         // 1. Não exibir horários que já foram agendados
         // 2. Salvar o agendamento para o usuário logado
+        // 3. Não exibir o botão de "Reservar" se o usuário não estiver logado
         try{
             if(!selectedDay || !selectedTime){
                 return
@@ -68,7 +82,7 @@ const ServiceItem = ({service, barbershop} :  ServiceItemProps) => {
 
             await createBooking({
                 serviceId: service.id,
-                userId: "cmqpi1dld00005otr1yjq2o50",
+                userId: (data?.user as any).id,
                 date: newDate
             })
             toast.success("Reserva criada com sucesso!")
@@ -182,7 +196,7 @@ const ServiceItem = ({service, barbershop} :  ServiceItemProps) => {
                                 </div>
                                 <SheetFooter className='px-5'>
                                     <SheetClose asChild>
-                                        <Button onClick={handleCreateBooking}>Confirmar</Button>
+                                        <Button disabled={!selectedDay || !selectedTime} onClick={handleCreateBooking}>Confirmar</Button>
                                     </SheetClose>
                                 </SheetFooter>
                             </SheetContent>
