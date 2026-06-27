@@ -8,6 +8,7 @@ interface GetBookingsProps {
     date: Date
 }
 
+// Função incompleta, olhar o service-item e passar o ID da barbearia
 export const getBookings = async ({date}: GetBookingsProps) => {
     const bookings = await db.booking.findMany({
         where: {
