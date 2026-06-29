@@ -1,8 +1,14 @@
 import { Card, CardContent } from "./ui/card"
 import { Badge } from "./ui/badge"
 import { Avatar, AvatarImage } from "./ui/avatar"
+import { Booking, Prisma } from "@/prisma/generated/client"
 
-const BookingItem = () => {
+interface BookingItemProps {
+    booking: Prisma.BookingGetPayload<{
+        include: {service: true}}>
+}
+
+const BookingItem = ({booking}: BookingItemProps) => {
     return(
         <>
             <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
@@ -15,7 +21,7 @@ const BookingItem = () => {
                     {/*Esquerda */}
                     <div className="flex flex-col gap-2 py-5 pl-5">
                     <Badge className="w-fit rounded-xl">Confirmado</Badge>
-                    <h3 className="font-bold">Corte de Cabelo</h3>
+                    <h3 className="font-bold">{booking.service.name}</h3>
 
                     <div className="flex items-center gap-2">
                         <Avatar className="h-6 w-6">

@@ -4,6 +4,8 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import { db } from "@/app/_lib/prisma"
 import { Adapter } from "next-auth/adapters"
 
+// Variável muito importante, pois vc pode resgatar a sessão do usuário logado 
+// passando ela como parâmetro da função getServerSession(authOptions)
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(db) as Adapter,
   providers: [

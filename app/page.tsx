@@ -48,8 +48,8 @@ const Home = async () => {
           <Image alt='banner' src="/banner-01.png" fill className="object-cover rounded-xl"/>
         </div>
 
-        {/*Agendamentos */}
-        <BookingItem/>
+        {/*Agendamentos <BookingItem/> */}
+        
 
         {/*Recomendados */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
