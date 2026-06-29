@@ -7,9 +7,12 @@ import { quickSearchOptions } from "./_constants/search"
 import BookingItem from "./components/booking-item"
 import Search from "./components/search"
 import Link from "next/link"
+import { getServerSession } from "next-auth"
+import { authOptions } from "./_lib/auth"
 
 
 const Home = async () => {
+  const session = await getServerSession(authOptions)
   const barbershops = await db.barbershop.findMany({})
   const popularBarbershops = await db.barbershop.findMany({
     orderBy: {
@@ -17,10 +20,29 @@ const Home = async () => {
     }
   })
 
+  const bookings = session?.user ? await db.booking.findMany({
+    where: {
+      userId: (session.user as any).id,
+      date: {
+        gte: new Date()
+      }
+    },
+    include: {
+      service: {
+        include: {
+          barbershop: true
+        }
+      }
+    },
+    orderBy: {
+      date: "asc"
+    }
+  }) : []
+
   return (
     <div>
       <Header/>
-      <div className="m-2">
+      <div className="m-3">
         <div className="p-2">
           <h2 className="text-xl font-bold">Olá, Melque!</h2>
           <p>Quinta-feira, 18 de Junho</p>
@@ -48,9 +70,16 @@ const Home = async () => {
           <Image alt='banner' src="/banner-01.png" fill className="object-cover rounded-xl"/>
         </div>
 
-        {/*Agendamentos <BookingItem/> */}
+        {/*Agendamentos  */}
+        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+          Agendamentos
+        </h2>
+        <div className="gap-3 flex overflow-x-auto [&::-webkit-scrollbar]:hidden">
+          {bookings.map(booking => (
+            <BookingItem key={booking.id} booking={booking}/>
+          ))}
+        </div>
         
-
         {/*Recomendados */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
           Recomendados
