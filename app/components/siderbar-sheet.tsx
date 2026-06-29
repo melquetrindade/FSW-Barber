@@ -6,13 +6,13 @@ import Link from "next/link"
 import { CalendarIcon, HomeIcon, LogInIcon, LogOutIcon} from "lucide-react"
 import { Button } from "./ui/button"
 import Image from "next/image"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog"
 import { signIn, signOut, useSession } from "next-auth/react"
 import { Avatar, AvatarImage, AvatarFallback} from "./ui/avatar"
+import SignInDialog from "./sign-in-dialog"
 
 const SidebarSheet = () => {
     const {data} = useSession()
-    const handleLoginWithGoogleClick = () => signIn("google")
     const handleLogoutClick = () => signOut()
 
     console.log(`imagem: ${data?.user?.image}`)
@@ -56,23 +56,9 @@ const SidebarSheet = () => {
                                 </Button>
                             </DialogTrigger>
                             <DialogContent className="w-[90%] text-center">
-                                <DialogHeader>
-                                    <DialogTitle>
-                                        Faça login na plataforma
-                                    </DialogTitle>
-                                    <DialogDescription>
-                                        Conecte-se usando sua conta do Google
-                                    </DialogDescription>
-                                </DialogHeader>
-
-                                <Button 
-                                    variant='outline'
-                                    onClick={handleLoginWithGoogleClick}
-                                    className="gap-2 font-bold">
-                                    <Image alt="google" src='/google.svg' width={18} height={18}/>
-                                    Google
-                                </Button>
+                                <SignInDialog/>
                             </DialogContent>
+                            
                         </Dialog>
                     </>
                 )}
@@ -107,12 +93,15 @@ const SidebarSheet = () => {
                 ))}
             </div>
 
-            <div className="px-5 flex flex-col gap-2 border-b border-solid pb-5">
-                <Button className="py-5 justify-start gap-2" onClick={handleLogoutClick}>
-                    <LogOutIcon size={18}/>
-                    Sair da conta
-                </Button>
-            </div>
+            {data?.user && (
+                <div className="px-5 flex flex-col gap-2 border-b border-solid pb-5">
+                    <Button className="py-5 justify-start gap-2" onClick={handleLogoutClick}>
+                        <LogOutIcon size={18}/>
+                        Sair da conta
+                    </Button>
+                </div>
+            )}
+            
         </SheetContent>
     );
 }
