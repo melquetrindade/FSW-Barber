@@ -4,9 +4,24 @@ import { Avatar, AvatarImage } from "./ui/avatar"
 import { Prisma } from "@/prisma/generated/client"
 import {format, isFuture} from 'date-fns'
 import { ptBR } from "date-fns/locale"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet"
+import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet"
 import Image from "next/image"
 import PhoneItem from "./phone-item"
+import { Button } from "./ui/button"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogOverlay,
+  AlertDialogPortal,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog"
 
 interface BookingItemProps {
     booking: Prisma.BookingGetPayload<{
@@ -126,8 +141,42 @@ const BookingItem = ({booking}: BookingItemProps) => {
                                 <PhoneItem key={phone} phone={phone}/>
                             ))}
                         </div>
-                        
                     </div>
+
+                    <SheetFooter className="pr-3 pl-0 mt-6">
+                        <div className="flex items-center gap-3 w-full">
+                            <SheetClose asChild>
+                                <Button variant="outline" className={isConfirmed ? `w-[50%]` : `w-[100%]`}>Voltar</Button>
+                            </SheetClose>
+                            
+                            {isConfirmed && (
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button 
+                                            className="w-[50%] bg-destructive text-white">
+                                                Cancelar reserva
+                                        </Button>
+                                    </AlertDialogTrigger>
+
+                                    <AlertDialogContent className="w-[100%] ring-1 ring-secondary">
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Você quer cancelar a reserva?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                Ao cancelar, você perderá sua reserva e não poderá recuperá-la. Essa ação é irreversível.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel variant="outline">Voltar</AlertDialogCancel>
+                                            <AlertDialogAction className="bg-destructive text-white">Confirmar</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+
+                                </AlertDialog>
+                            )}
+                            
+                        </div>
+                    </SheetFooter>
                 </SheetHeader>
             </SheetContent>
         </Sheet>
