@@ -11,6 +11,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "./_lib/auth"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
+import { getConfirmedBookings } from "./_data/get-confirmed-bookings"
 
 
 const Home = async () => {
@@ -22,24 +23,26 @@ const Home = async () => {
     }
   })
 
-  const bookings = session?.user ? await db.booking.findMany({
-    where: {
-      userId: session.user.id,
-      date: {
-        gte: new Date()
-      }
-    },
-    include: {
-      service: {
-        include: {
-          barbershop: true
-        }
-      }
-    },
-    orderBy: {
-      date: "asc"
-    }
-  }) : []
+  // const bookings = session?.user ? await db.booking.findMany({
+  //   where: {
+  //     userId: session.user.id,
+  //     date: {
+  //       gte: new Date()
+  //     }
+  //   },
+  //   include: {
+  //     service: {
+  //       include: {
+  //         barbershop: true
+  //       }
+  //     }
+  //   },
+  //   orderBy: {
+  //     date: "asc"
+  //   }
+  // }) : []
+
+  const confirmedBookings = await getConfirmedBookings()
 
   return (
     <div>
@@ -81,14 +84,18 @@ const Home = async () => {
         </div>
 
         {/*Agendamentos  */}
-        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
-          Agendamentos
-        </h2>
-        <div className="gap-3 flex overflow-x-auto [&::-webkit-scrollbar]:hidden">
-          {bookings.map(booking => (
-            <BookingItem key={booking.id} booking={booking}/>
-          ))}
-        </div>
+        {confirmedBookings.length > 0 && (
+          <>
+            <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+            Agendamentos
+          </h2>
+          <div className="gap-3 flex overflow-x-auto [&::-webkit-scrollbar]:hidden">
+            {confirmedBookings.map(booking => (
+              <BookingItem key={booking.id} booking={JSON.parse(JSON.stringify(booking))}/>
+            ))}
+          </div>
+          </>
+        )}
         
         {/*Recomendados */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
@@ -96,7 +103,7 @@ const Home = async () => {
         </h2>
         <div className="flex gap-4 overflow-auto mb-10 [&::-webkit-scrollbar]:hidden">
           {
-            barbershops.map((barbershop) => <BarberShopItem key={barbershop.id} barbershop={barbershop}/>)
+            barbershops.map((barbershop) => <BarberShopItem key={barbershop.id} barbershop={JSON.parse(JSON.stringify(barbershop))}/>)
           }
         </div>
 
@@ -106,7 +113,7 @@ const Home = async () => {
         </h2>
         <div className="flex gap-4 overflow-auto mb-10 [&::-webkit-scrollbar]:hidden">
           {
-            popularBarbershops.map((barbershop) => <BarberShopItem key={barbershop.id} barbershop={barbershop}/>)
+            popularBarbershops.map((barbershop) => <BarberShopItem key={barbershop.id} barbershop={JSON.parse(JSON.stringify(barbershop))}/>)
           }
         </div>
         
