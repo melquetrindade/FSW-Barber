@@ -195,6 +195,7 @@ const ServiceItem = ({service, barbershop} :  ServiceItemProps) => {
                                             <div className='py-4 border border-solid px-5 flex overflow-x-auto [&::-webkit-scrollbar]:hidden gap-2'>
                                                 {timeList.length > 0 ? timeList.map((time) => (
                                                     <Button 
+                                                        key={time}
                                                         variant={selectedTime === time ? 'default' : 'outline'}
                                                         className='rounded-full'
                                                         onClick={() => handleTimeSelect(time)}

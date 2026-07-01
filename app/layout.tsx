@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import "./globals.css"
-import { cn } from "@/app/_lib/utils"
 import { Toaster } from "./components/ui/sonner"
 import Footer from "./components/footer"
 import AuthProvider from "./_providers/auth"

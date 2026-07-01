@@ -1,4 +1,4 @@
-import { ChevronLeftIcon, MapPinIcon, MenuIcon, SmartphoneIcon, StarIcon } from 'lucide-react'
+import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from 'lucide-react'
 import { db } from '../../_lib/prisma'
 import Image from 'next/image'
 import { Button } from "../../components/ui/button"
@@ -91,7 +91,7 @@ const BarbershopPage = async ({params} : BarbershopPageProps) => {
             {/*Contato */}
             <div className='p-5 space-y-3'>
                 {barbershop.phones.map((phone) => (
-                    <PhoneItem phone={phone}/>
+                    <PhoneItem key={phone} phone={phone}/>
                 ))}
             </div>
         </div>
