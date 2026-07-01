@@ -11,9 +11,11 @@ const Bookings = async () => {
         // TODO: mostrar pop-up de login
         return notFound()
     }
+    const userId = session.user.id
+
     const confirmedBookings = await db.booking.findMany({
         where: {
-            userId: (session.user as any).id,
+            userId,
             date: {
                 gte: new Date()
             }
@@ -32,7 +34,7 @@ const Bookings = async () => {
 
     const concludeBookings = await db.booking.findMany({
         where: {
-            userId: (session.user as any).id,
+            userId,
             date: {
                 lt: new Date()
             }

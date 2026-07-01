@@ -24,7 +24,7 @@ const Home = async () => {
 
   const bookings = session?.user ? await db.booking.findMany({
     where: {
-      userId: (session.user as any).id,
+      userId: session.user.id,
       date: {
         gte: new Date()
       }

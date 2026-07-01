@@ -7,6 +7,7 @@ export const deleteBooking = async (bookingId: string) => {
         where: {
             id: bookingId
         }
-    }),
+    })
+
     revalidatePath("/bookings")
-} 
+}
