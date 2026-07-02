@@ -4,6 +4,8 @@ import { authOptions } from "../_lib/auth";
 import { db } from "../_lib/prisma";
 import { notFound } from "next/navigation";
 import BookingItem from "../components/booking-item";
+import { getConfirmedBookings } from "../_data/get-confirmed-bookings";
+import { getConcludedBookings } from "../_data/get-concluded-bookings";
 
 const Bookings = async () => {
     const session = await getServerSession(authOptions)
@@ -13,43 +15,9 @@ const Bookings = async () => {
     }
     const userId = session.user.id
 
-    const confirmedBookings = await db.booking.findMany({
-        where: {
-            userId,
-            date: {
-                gte: new Date()
-            }
-        },
-        include: {
-            service: {
-                include: {
-                    barbershop: true
-                }
-            }
-        },
-        orderBy: {
-            date: "asc"
-        }
-    })
+    const confirmedBookings = await getConfirmedBookings()
 
-    const concludeBookings = await db.booking.findMany({
-        where: {
-            userId,
-            date: {
-                lt: new Date()
-            }
-        },
-        include: {
-            service: {
-                include: {
-                    barbershop: true
-                }
-            }
-        },
-        orderBy: {
-            date: "asc"
-        }
-    })
+    const concludeBookings = await getConcludedBookings()
 
     return (
         <>
@@ -61,7 +29,7 @@ const Bookings = async () => {
                         Nenhum agendamento encontrado.
                     </p>
                 )}
-                
+
                 {confirmedBookings.length > 0 && (
                     <>
                     <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">

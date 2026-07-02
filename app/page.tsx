@@ -23,25 +23,6 @@ const Home = async () => {
     }
   })
 
-  // const bookings = session?.user ? await db.booking.findMany({
-  //   where: {
-  //     userId: session.user.id,
-  //     date: {
-  //       gte: new Date()
-  //     }
-  //   },
-  //   include: {
-  //     service: {
-  //       include: {
-  //         barbershop: true
-  //       }
-  //     }
-  //   },
-  //   orderBy: {
-  //     date: "asc"
-  //   }
-  // }) : []
-
   const confirmedBookings = await getConfirmedBookings()
 
   return (
