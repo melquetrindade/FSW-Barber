@@ -15,8 +15,6 @@ const SidebarSheet = () => {
     const {data} = useSession()
     const handleLogoutClick = () => signOut()
 
-    console.log(`imagem: ${data?.user?.image}`)
-
     return (
         <SheetContent className="overflow-y-auto [&::-webkit-scrollbar]:hidden">
             <SheetHeader>
@@ -27,9 +25,6 @@ const SidebarSheet = () => {
                 
                 {data?.user ? (
                     <div className="flex items-center gap-2">
-                        {/* <Avatar>
-                            <AvatarImage src={data?.user?.image ?? ''} width={18} height={18}/>
-                        </Avatar> */}
 
                         {data?.user?.image ? (
                         <Avatar>

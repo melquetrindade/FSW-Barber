@@ -1,22 +1,10 @@
-import { getServerSession } from "next-auth";
 import Header from "../components/header";
-import { authOptions } from "../_lib/auth";
-import { db } from "../_lib/prisma";
-import { notFound } from "next/navigation";
 import BookingItem from "../components/booking-item";
 import { getConfirmedBookings } from "../_data/get-confirmed-bookings";
 import { getConcludedBookings } from "../_data/get-concluded-bookings";
 
 const Bookings = async () => {
-    const session = await getServerSession(authOptions)
-    if(!session?.user){
-        // TODO: mostrar pop-up de login
-        return notFound()
-    }
-    const userId = session.user.id
-
     const confirmedBookings = await getConfirmedBookings()
-
     const concludeBookings = await getConcludedBookings()
 
     return (

@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth"
 import { db } from "../_lib/prisma"
 import { authOptions } from "../_lib/auth"
 
+// Função que retorna as reservas concluídas do usuário logado
 export const getConcludedBookings = async () => {
   const session = await getServerSession(authOptions)
   if (!session?.user) return []

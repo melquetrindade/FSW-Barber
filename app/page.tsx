@@ -28,6 +28,8 @@ const Home = async () => {
   return (
     <div>
       <Header/>
+
+      {/*Mensagem de boas-vindas */}
       <div className="m-3">
         <div className="p-2">
           <h2 className="text-xl font-bold">Olá, {session?.user ? session.user.name : 'bem-vindo'}!</h2>

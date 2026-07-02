@@ -4,63 +4,22 @@ import {Barbershop, BarbershopService, Booking} from '../../prisma/generated/cli
 import Image from 'next/image'
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle} from './ui/sheet';
-import { Calendar } from './ui/calendar'
-import { ptBR } from 'date-fns/locale';
+import { Sheet } from './ui/sheet';
 import { useEffect, useMemo, useState } from 'react';
-import { isPast, isToday, set } from 'date-fns';
+import { set } from 'date-fns';
 import { createBooking } from '../_actions/create-booking';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 import { getBookings } from '../_actions/get-booking';
 import { Dialog, DialogContent } from './ui/dialog';
 import SignInDialog from './sign-in-dialog';
-import BookingSummary from './booking-summary';
 import { useRouter } from 'next/navigation';
+import { getTimeList } from '../_data/get-time-list';
+import BookingSheetContent from './booking-sheet-content';
 
 interface ServiceItemProps {
     service: BarbershopService
     barbershop: Pick<Barbershop, 'name'>
-}
-
-const TIME_LIST = [
-    "08:00",
-    "08:30",
-    "09:00",
-    "09:30",
-    "10:00",
-    "10:30",
-    "11:00",
-    "11:30",
-    "14:00",
-    "14:30",
-    "15:00",
-    "15:30",
-    "16:00",
-    "16:30",
-    "17:00",
-    "17:30",
-]
-
-const getTimeList = (bookings: Booking[], selectedDay: Date) => {
-    // TODO: Não exibir horários no passado
-    const timeList = TIME_LIST.filter(time => {
-        const hour = Number(time.split(":")[0])
-        const minutes = Number(time.split(":")[1])
-
-        // Essa constante verifica se a hora e os minutos estão no passado
-        const timeIsOnThePast = isPast(set(new Date(), {hours: hour, minutes: minutes}))
-        if(timeIsOnThePast && isToday(selectedDay)){
-            return false
-        }
-
-        // verifica sem tem reserva no horário atual
-        if(bookings.some(booking => booking.date.getHours() === hour && booking.date.getMinutes() === minutes)){
-            return false
-        }
-        return true
-    })
-    return timeList
 }
 
 const ServiceItem = ({service, barbershop} :  ServiceItemProps) => {
@@ -71,8 +30,6 @@ const ServiceItem = ({service, barbershop} :  ServiceItemProps) => {
     const [dayBookings, setDayBookings] = useState<Booking[]>([])
     const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
     const router = useRouter()
-
-    //console.log(service.barbershopId)
 
     useEffect(() => {
         const fetch = async () => {
@@ -100,8 +57,6 @@ const ServiceItem = ({service, barbershop} :  ServiceItemProps) => {
         }
         return setSignInDialogIsOpen(true)
     }
-
-    //console.log("agendamentos:", dayBookings);
 
     const handleDateSelect = (date: Date | undefined) => {
         setSelectedDay(date)
@@ -139,7 +94,7 @@ const ServiceItem = ({service, barbershop} :  ServiceItemProps) => {
 
     const timeList = useMemo(() => {
         if (!selectedDay) return []
-        return getTimeList(dayBookings, selectedDay)
+        return getTimeList({ bookings: dayBookings, selectedDay: selectedDay })
     }, [dayBookings, selectedDay])
 
     const selectedDate = useMemo(() => {
@@ -177,8 +132,40 @@ const ServiceItem = ({service, barbershop} :  ServiceItemProps) => {
                                 <Button 
                                     onClick={handleBookingClick}
                                     variant='secondary' 
-                                    size='sm'>Reservar</Button>
-                                <SheetContent className='px-0 flex h-full flex-col'>
+                                    size='sm'>Reservar
+                                </Button>
+                                <BookingSheetContent 
+                                    barbershop={barbershop}
+                                    handleCreateBooking={handleCreateBooking}
+                                    handleDateSelect={handleDateSelect}
+                                    handleTimeSelect={handleTimeSelect}
+                                    selectedDate={selectedDate}
+                                    selectedDay={selectedDay}
+                                    selectedTime={selectedTime}
+                                    service={service}
+                                    timeList={timeList}
+                                />
+                                
+                            </Sheet>
+                            
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Dialog open={signInDialogIsOpen} onOpenChange={(open) => setSignInDialogIsOpen(open)}>
+                <DialogContent className='w-[90%]'>
+                    <SignInDialog/>
+                </DialogContent>
+            </Dialog>
+        </>
+     );
+}
+ 
+export default ServiceItem;
+
+
+{/* <SheetContent className='px-0 flex h-full flex-col'>
                                     <SheetHeader>
                                         <SheetTitle className="text-center font-bold text-lg">Fazer Reserva</SheetTitle>
                                     </SheetHeader>
@@ -229,21 +216,4 @@ const ServiceItem = ({service, barbershop} :  ServiceItemProps) => {
                                     <SheetFooter className='px-5'>
                                         <Button disabled={!selectedDay || !selectedTime} onClick={handleCreateBooking}>Confirmar</Button>
                                     </SheetFooter>
-                                </SheetContent>
-                            </Sheet>
-                            
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-
-            <Dialog open={signInDialogIsOpen} onOpenChange={(open) => setSignInDialogIsOpen(open)}>
-                <DialogContent className='w-[90%]'>
-                    <SignInDialog/>
-                </DialogContent>
-            </Dialog>
-        </>
-     );
-}
- 
-export default ServiceItem;
+                                </SheetContent> */}
